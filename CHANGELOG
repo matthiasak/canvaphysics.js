@@ -1,0 +1,46 @@
+Changelog
+---
+
+Nov 6, 2015
+
+- upgrading various scripts, check dosc and package.json for details
+- adding a config.json for configuration, and equivalent checks on heroku-server.js
+- added proper hot module code that reruns the app in app-browserify.js
+- new example tests, and adding ava as build system instead of mocha
+
+Nov 1, 2015
+
+- new babel tooling, but reverted babe; back to 5.8.x because 6.x is not es7 friendly
+- new babelify, new browserify, new node engine (node v5!!! run `npm upgrade:brew`)
+- new documentation and gh-pages workflow
+- simplified installation time/process, especially with node v5 (auto `dedupe` feature in node v5, or in older version do `npm run dedupe`)
+- modified the server-side architecture to use the babel require-hook (`require('babel/register')`) only for app code, and to share a backing server incluide to save memory usage
+
+Oct 30, 2015
+
+- upgraded babel to @^6.0.12, including adopting the new ecosystem of tools, plugins, parsers, and transformers
+- added `npm-run-all` to build system, which cleans up any asynchronous scripts and logging running on parallel and sequential background and foreground scripts
+
+Oct 28, 2015
+
+- reverting to postcss, because node-sass takes forever to install when it works, and fails to install on weak connections (npm downloads a huge binary)
+- in lieue of node-sass, the only thing that doesn't work exactly like Sass is interpolation
+
+Oct 27, 2015
+
+- added `surge.sh` push/deployment scripts, and split up the express server code, so that heroku-server now uses the `nanny` module to scale out and monitor the health of a load-balanced cluster
+- added [`hmr-browserify`](https://github.com/substack/browserify-handbook#browserify-hmr) support, which allows live code changes of only a single file (not the entire app-browserify) to be pushed to the browser as the developers makes edits
+- added `exorcist` to the js build process; which pulls the source maps out of `app-browserify.js` into its own file, `app-browserify.js.map` (browsers already know to look for this file if source maps are enabled and the source map is not embedded in the main file); this can make certain debugging and build steps faster
+
+Oct 25, 2015
+
+- npm scripts now include an `npm run gh-pages`, that uses git subtrees to push only your `dist` folder to the `gh-pages` branch (in otherwords, your visible app will now be located at `http://username.github.io/projectname`, not `http://username.github.io/projectname/dist`)
+
+Oct 21, 2015
+
+- Build system and package.json changes: Tools are now installed per project, due to difficulties in global tool/version management. Tools are also now included as a dependency (installed with `npm install`), so that build tools can run both local server or on platforms like Heroku. When you push to platforms like Heroku, the package.json will automatically build the source files and flush them into the dist folder. This eliminates the need to manage the built js and css files in Git, so they are now in `.gitignore`.
+- `npm run watch` no longer uglifies by default, and automatically builds source maps with `-d` option for browserify
+- `mocha` is configured to run with babel, so tests and files can be run with ES7/6
+- `esdoc` is automatically installed and provided with a config file to help with generating documentation for DocBlocks. Install `docblockr` (Sublime Text) or similar plugins to make this easy.
+- PostCSS removed in favor of node-sass, because despite the speed benefits, no one releases anything in PostCSS, nor does PostCSS have perfect support for advanced Sass language syntax like mixins and interpolation.
+- React has been upgraded to v0.14

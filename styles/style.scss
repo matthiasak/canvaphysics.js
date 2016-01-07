@@ -1,0 +1,273 @@
+@import "../bower_components/normalize-scss/_normalize.scss";
+@import "../bower_components/typeplate-starter-kit/scss/_typeplate.scss";
+
+p+p {
+    text-indent: 0;
+    margin-top: 0;
+}
+
+p {
+    max-width: 80ch;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+ul, ol {
+    max-width: 80ch;
+    margin-left: 0;
+    margin-right: auto;
+    display: inline-block;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'San Francisco', 'Cambria', 'Georgia', 'Times New Roman', serif;
+}
+
+/**
+ * BOX-SIZING
+ */
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+    // transition-duration: 0.2s;
+    // transition-property: transform;
+    // transition-timing-function: ease;
+}
+
+/**
+ * GRIDS
+ */
+
+.grid {
+    display: block;
+    text-align: justify;
+    font-size: 0;
+    position: relative;
+
+    > * {
+        display: inline-block;
+        width: 100%;
+        font-size: 1rem;
+        text-align: left;
+    }
+
+    &:after {
+        display: table;
+        width: 100%;
+    }
+}
+
+@mixin grid_r($col, $width, $padding: 0) {
+    @media screen and (min-width: #{$width}px) {
+        .grid-#{$col}-#{$width} {
+            & > * {
+                width: #{100/$col}%;
+                padding: #{$padding}px;
+            }
+        }
+    }
+}
+
+@mixin grid($col, $padding: 0) {
+    .grid-#{$col} {
+        & > * {
+            width: #{100/$col}%;
+            padding: #{$padding}px;
+        }
+    }
+}
+
+@include grid(2);
+@include grid(4);
+@include grid(8);
+@include grid_r(2,400);
+@include grid_r(2,800);
+@include grid_r(4,400);
+@include grid_r(4,800);
+@include grid_r(8,800);
+@include grid_r(8,1024);
+@include grid_r(8,1280);
+
+/**
+ * GENERAL
+ */
+
+img {
+    max-width: 100% !important;
+}
+
+/**
+ * PACE (automatic pre-loader thingy)
+ */
+
+.pace {
+    pointer-events: none;
+    user-select: none;
+    transition: all 1s ease;
+    .pace-progress {
+        background: #2299dd;
+        position: fixed;
+        z-index: 2000;
+        top: 0;
+        right: 100%;
+        width: 100%;
+        height: 2px;
+        transition: all 1s ease;
+    }
+}
+
+.pace-inactive {
+    opacity: 0;
+}
+
+.pace-active {
+    opacity: 1;
+}
+
+/**
+ * App code
+ */
+
+/**
+ * General styles
+ */
+
+html, body {
+    // background-color: #222;
+    overflow-x: hidden;
+    font-family: 'San Francisco', 'Helvetica', 'Trebuchet MS', Arial, sans-serif;
+    color:#555;
+}
+
+.slides {
+    display: block;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+
+    & > * {
+        display: table;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        animation: fadeIn 0.5s 0.5s ease both;
+
+        &:after {
+            content: '';
+            display: table-cell;
+            height: 100%;
+            width: 0px;
+        }
+
+        &.from-left {
+            animation:fadeRight 0.5s ease both;
+        }
+        &.from-right {
+            animation:fadeLeft 0.5s ease both;
+        }
+
+        & > * {
+            display: table-cell;
+            height: auto;
+            vertical-align: middle;
+            padding:1.5rem;
+        }
+    }
+}
+
+@keyframes fadeIn {
+    0%{ opacity: 0; }
+    100%{ opacity: 1; }
+}
+
+@keyframes fadeLeft {
+    0%{ opacity: 0; transform: translateX(50%); }
+    100%{ opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeRight {
+    0%{ opacity: 0; transform: translateX(-50%); }
+    100%{ opacity: 1; transform: translateX(0); }
+}
+
+/**
+ * Theme styles
+ */
+
+.slides {
+    overflow-y: auto;
+    & > * { /* each slide */
+        background-color: #efefef; /* default bg color */
+        & > * { /* each content container */
+            text-align: center;
+            & > * { /* each content block */
+                text-align: left;
+            }
+            .hr {
+                position: relative;
+                text-align: center !important;
+                margin: 1rem 0;
+                &:before, &:after {
+                    display: inline-block;
+                    content: '';
+                    width: 4rem;
+                    border-top: 1px dotted rgba(150,150,150,.75);
+                    vertical-align: middle;
+                    margin: 0 .5rem;
+                }
+            }
+            h1,h2,h3 {
+                text-align: center;
+            }
+            hr {
+                outline: 0;
+                border: none;
+                margin: 1rem auto;
+                max-width: 80ch;
+                border-top: 1px dotted rgba(150,150,150,.75);
+            }
+            p, ul, pre {
+                margin-left: auto;
+                margin-right: auto;
+                max-width: 80ch;
+            }
+        }
+        iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            border: none;
+        }
+    }
+}
+
+.arrow {
+    position: fixed;
+    top: 50%;
+    background: black;
+    color: white;
+    display: inline-block;
+    padding: .4rem;
+    transform: translateY(-50%);
+    z-index: 1;
+    &.left {
+        left: 0;
+        &:before{content: '↤';}
+    }
+    &.right {
+        right: 0;
+        &:before{content: '↦';}
+    }
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+html:fullscreen,body:fullscreen,.slides:fullscreen {
+    width:100%;
+    height:100%;
+}
